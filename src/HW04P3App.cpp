@@ -25,6 +25,7 @@ class HW04P3App : public AppBasic {
   	void prepareSettings( Settings *settings );
 	void setup();
 	void mouseMove( MouseEvent event );	
+	void mouseDown( MouseEvent event );
 	void draw();
 	
 	gl::Texture			mMapTex;
@@ -35,6 +36,8 @@ class HW04P3App : public AppBasic {
 
 	int index;
 	Entry* entry_arr;
+	Entry* nearestEntry;
+	anglesswStarbucks* starbucks;
 };
 
 gl::Texture renderSvgToTexture( svg::DocRef doc, Vec2i size )
@@ -84,6 +87,11 @@ void HW04P3App::setup()
 
 	in_file.close();
 	delete in_file;
+
+	starbucks = new anglesswStarbucks();
+	starbucks->build(entry_arr,index);
+
+	nearestEntry = 0;
 }
 
 void HW04P3App::mouseMove( MouseEvent event )
@@ -95,6 +103,11 @@ void HW04P3App::mouseMove( MouseEvent event )
 	// if the current node has no name just set it to NULL
 	if( mCurrentCountry && mCurrentCountry->getId().empty() )
 		mCurrentCountry = NULL;	
+}
+
+void HW04P3App::mouseDown( MouseEvent event )
+{
+	nearestEntry = starbucks->getNearest((double) event.getPos().x/getWindowSize().x,(double) (1-event.getPos().y/getWindowSize().y));
 }
 
 void HW04P3App::draw()
@@ -126,7 +139,14 @@ void HW04P3App::draw()
 	for(int i=0;i<index;i++) {
 		gl::color(ColorA(0.5,0.5,0.5,0.5));
 		gl::drawSolidCircle(Vec2f(35+entry_arr[i].x*getWindowSize().x,(1-entry_arr[i].y)*getWindowSize().y),1);
-		}
+	}
+
+	if(nearestEntry) {
+		gl::color(ColorA(1.0,1.0,1.0,0.5));
+		gl::drawSolidCircle(Vec2f(35+nearestEntry->x*getWindowSize().x,(1-nearestEntry->y)*getWindowSize().y),20);
+	}
+	else
+		return;
 }
 
 
