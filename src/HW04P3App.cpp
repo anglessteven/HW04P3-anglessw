@@ -27,6 +27,7 @@ class HW04P3App : public AppBasic {
 	void mouseMove( MouseEvent event );	
 	void mouseDown( MouseEvent event );
 	void draw();
+	void shutdown();
 	
 	gl::Texture			mMapTex;
 	gl::TextureFontRef	mFont;
@@ -138,17 +139,23 @@ void HW04P3App::draw()
 
 	for(int i=0;i<index;i++) {
 		gl::color(ColorA(0.5,0.5,0.5,0.5));
-		gl::drawSolidCircle(Vec2f(35+entry_arr[i].x*getWindowSize().x,(1-entry_arr[i].y)*getWindowSize().y),1);
+		gl::drawSolidCircle(Vec2f(entry_arr[i].x*(double) getWindowSize().x,(1-entry_arr[i].y)*(double) getWindowSize().y),1);
 	}
 
 	if(nearestEntry) {
 		gl::color(ColorA(1.0,1.0,1.0,0.5));
-		gl::drawSolidCircle(Vec2f(35+nearestEntry->x*getWindowSize().x,(1-nearestEntry->y)*getWindowSize().y),20);
-		console() << nearestEntry->x << ' ' << (1-nearestEntry->y) << endl;
+		gl::drawSolidCircle(Vec2f((double) nearestEntry->x*(double) getWindowSize().x,(1-nearestEntry->y)*(double) getWindowSize().y),20);
 	}
 	else
 		return;
 }
 
+void HW04P3App::shutdown()
+{
+	delete starbucks;
+	delete [] entry_arr;
+	delete nearestEntry;
+	delete mCurrentCountry;
+}
 
 CINDER_APP_BASIC( HW04P3App, RendererGl(0) )
