@@ -107,7 +107,7 @@ void HW04P3App::mouseMove( MouseEvent event )
 
 void HW04P3App::mouseDown( MouseEvent event )
 {
-	nearestEntry = starbucks->getNearest((double) event.getPos().x/getWindowSize().x,(double) (1-event.getPos().y/getWindowSize().y));
+	nearestEntry = starbucks->getNearest((double) event.getPos().x/(double) getWindowSize().x,(1-((double) event.getPos().y/(double) getWindowSize().y)));
 }
 
 void HW04P3App::draw()
@@ -144,6 +144,7 @@ void HW04P3App::draw()
 	if(nearestEntry) {
 		gl::color(ColorA(1.0,1.0,1.0,0.5));
 		gl::drawSolidCircle(Vec2f(35+nearestEntry->x*getWindowSize().x,(1-nearestEntry->y)*getWindowSize().y),20);
+		console() << nearestEntry->x << ' ' << (1-nearestEntry->y) << endl;
 	}
 	else
 		return;
